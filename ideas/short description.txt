@@ -1,1 +1,1 @@
-Système de gestion de contenu (CMS) : Un CMS basé sur des services qui gèrent la création de contenu, les utilisateurs, les commentaires et la publication.
+Application de réservation de bungalows qui propose une API pour les clients, leur permettant de consulter et réserver des options de bungalows en ligne. Elle comprend également un backoffice pour les agents, facilitant la gestion des réservations, des disponibilités et le suivi du système de manière efficace. 
