@@ -1,24 +1,11 @@
 const express = require('express');
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const authRouter = require('./routes/AuthRoute.js');
 const bungalowRouter = require('./routes/BungalowRoute.js');
 const reservationRouter = require('./routes/ReservationRoute.js');
 const cookieParser = require('cookie-parser');
 
-var MongoClient = require('mongodb').MongoClient;
-var uri = 'mongodb://localhost/:27017/Main';
-const client = new MongoClient(uri);
-
-async function run() {
-    try {
-        await client.connect();
-        console.log("Connected to Main db!");
-    } finally {
-        await client.close();
-    }
-}
-
-run().catch(console.error);
 
 
 const app = express();
@@ -30,6 +17,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());  
 app.use(cookieParser());
 
+
+mongoose.connect("mongodb://localhost:27017/Bunga-low")
+.then(()=>console.log(`mongodb connected!`))
+.catch((err)=>console.log(`mongodb connection error: ${err}`))
 
 
 app.use('/', authRouter);

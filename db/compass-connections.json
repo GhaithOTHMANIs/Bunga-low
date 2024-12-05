@@ -1,0 +1,27 @@
+{
+  "type": "Compass Connections",
+  "version": {
+    "$numberInt": "1"
+  },
+  "connections": [
+    {
+      "id": "fc88f38f-2ffd-4e43-aba0-290d8c09f851",
+      "lastUsed": {
+        "$date": {
+          "$numberLong": "1733322899921"
+        }
+      },
+      "favorite": {
+        "name": "Bunga-low",
+        "color": "color1"
+      },
+      "savedConnectionType": "favorite",
+      "connectionOptions": {
+        "connectionString": "mongodb://localhost:27017/",
+        "oidc": {
+          "serializedState": "eyJvaWRjUGx1Z2luU3RhdGVWZXJzaW9uIjowLCJzdGF0ZSI6W119"
+        }
+      }
+    }
+  ]
+}

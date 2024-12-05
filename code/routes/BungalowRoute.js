@@ -1,30 +1,27 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const AuthService = require('../services/AuthService.js');
-
+const AuthService = require('../middlewares/authentification.js');
+const bungalowController = require('../controllers/bungalowController.js');
 
 
 const route = express.Router();
 
 
-route.get('/all',AuthService.authenticateToken , (req, res) => {
-    res.send('1st tested(all bungalows)');
-});
+route.get('/all',AuthService.authenticateToken , bungalowController.getAllBungalows);
 
-route.get('/:id',AuthService.authenticateToken , (req, res) => {
-    res.send('Method not implemented yet!');
-});
-route.post('/',AuthService.authenticateToken , (req, res) => {
-    res.send('Method not implemented yet!');
-});
-route.put('/:id',AuthService.authenticateToken , (req, res) => {
-    res.send('Method not implemented yet!');
-});
-route.delete('/:id',AuthService.authenticateToken , (req, res) => {
-    res.send('Method not implemented yet!');
-});
-route.post('/:id/geo',AuthService.authenticateToken , (req, res) => {
-    res.send('Method not implemented yet!');
-});
+route.get('/add',AuthService.authenticateToken , bungalowController.addBungalowPage);
+
+route.post('/add',AuthService.authenticateToken , bungalowController.addBungalow);
+
+route.get('/edit/:id',AuthService.authenticateToken , bungalowController.editBungalowPage);
+
+route.post('/edit/:id',AuthService.authenticateToken , bungalowController.editBungalow);
+
+route.get('/:id',AuthService.authenticateToken ,bungalowController.getBungalowDetails);
+
+route.delete('/:id',AuthService.authenticateToken , bungalowController.deleteBungalow);
+
+route.post('/:id/geo',AuthService.authenticateToken , bungalowController.locateBungalow);
+
 
 module.exports = route;

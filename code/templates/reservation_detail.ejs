@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservation Details</title>
+</head>
+<body>
+  <h1>Reservation Details</h1>
+
+  <div>
+    <h2>Bungalow: <%= reservation.bungalow.address %></h2>
+    <p><strong>Type:</strong> <%= reservation.bungalow.type %></p>
+    <p><strong>Price:</strong> $<%= reservation.bungalow.price %></p>
+    <p><strong>Status:</strong> <%= reservation.bungalow.status %></p>
+  </div>
+
+  <div>
+    <h3>Reservation Information</h3>
+    <p><strong>User:</strong> <%= reservation.user %></p>
+    <p><strong>Start Date:</strong> <%= new Date(reservation.startDate).toLocaleDateString() %></p>
+    <p><strong>End Date:</strong> <%= new Date(reservation.endDate).toLocaleDateString() %></p>
+    <p><strong>Status:</strong> <%= reservation.status %></p>
+  </div>
+
+  
+  <a href="/reservation/all">Back to Reservations</a>
+
+</body>
+</html>

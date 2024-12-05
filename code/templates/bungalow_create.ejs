@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Bungalow</title>
+</head>
+<body>
+  <h1>Add a New Bungalow</h1>
+  <form id="bungalowForm">
+    <label for="address">Address:</label><br>
+    <input type="text" id="address" name="address" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description"></textarea><br><br>
+
+    <label for="type">Type:</label><br>
+    <select id="type" name="type" required>
+      <option value="detached">Detached</option>
+      <option value="semi-detached">Semi-Detached</option>
+      <option value="terraced">Terraced</option>
+      <option value="cottage">Cottage</option>
+      <option value="villa">Villa</option>
+    </select><br><br>
+
+    <label for="status">Status:</label><br>
+    <select id="status" name="status" required>
+      <option value="available">Available</option>
+      <option value="rented">Rented</option>
+      <option value="under maintenance">Under Maintenance</option>
+    </select><br><br>
+
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price" min="0" required><br><br>
+
+    <label for="images">Images (comma-separated URLs):</label><br>
+    <input type="text" id="images" name="images"><br><br>
+
+    <label for="longitude">Longitude:</label><br>
+    <input type="number" id="longitude" name="longitude" step="any" required><br><br>
+
+    <label for="latitude">Latitude:</label><br>
+    <input type="number" id="latitude" name="latitude" step="any" required><br><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="responseMessage"></p>
+
+  <script>
+    document.getElementById('bungalowForm').addEventListener('submit', async (event) => {
+      event.preventDefault(); // Prevent form from refreshing the page
+
+      const address = document.getElementById('address').value;
+      const description = document.getElementById('description').value;
+      const type = document.getElementById('type').value;
+      const status = document.getElementById('status').value;
+      const price = parseFloat(document.getElementById('price').value);
+      const images = document.getElementById('images').value.split(',').map(url => ({ url: url.trim() }));
+      const longitude = parseFloat(document.getElementById('longitude').value);
+      const latitude = parseFloat(document.getElementById('latitude').value);
+
+      const data = {
+        address,
+        description,
+        type,
+        status,
+        price,
+        images,
+        location: {
+          type: 'Point',
+          coordinates: [longitude, latitude],
+        },
+      };
+
+      try {
+        const response = await fetch('/bungalow/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          document.getElementById('responseMessage').textContent = 'Bungalow added successfully!';
+        } else {
+          document.getElementById('responseMessage').textContent = `Error: ${result.error}`;
+        }
+      } catch (error) {
+        document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
+      }
+    });
+  </script>
+</body>
+</html>
