@@ -137,25 +137,6 @@ async function approveReservation(req, res) {
   }
 }
 
-async function declineReservation(req, res) {
-  const { id } = req.params;
-
-  try {
-    const updatedReservation = await Reservation.findByIdAndUpdate(
-      id,
-      { status: 'cancelled' },
-      { new: true }
-    );
-    if (!updatedReservation) {
-      return res.status(404).json({ error: 'Reservation not found' });
-    }
-    res.status(200).json({ message: 'Reservation declined successfully!', updatedReservation });
-  } catch (err) {
-    console.error('Error declining reservation:', err);
-    res.status(500).json({ error: 'Error declining reservation', details: err.message });
-  }
-}
-
 module.exports = {
   getAllReservations,
   getReservationDetails,
@@ -165,5 +146,4 @@ module.exports = {
   editReservationPage,
   deleteReservation,
   approveReservation,
-  declineReservation,
 };

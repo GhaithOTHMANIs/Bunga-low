@@ -14,8 +14,6 @@ route.get('/all',AuthController.authenticateToken ,reservationController.getAllR
 
 route.post('/approve/:id',AuthController.authenticateToken , reservationController.approveReservation);
 
-route.post('/decline/:id',AuthController.authenticateToken , reservationController.declineReservation);
-
 route.get('/edit/:id',AuthController.authenticateToken , reservationController.editReservationPage);
 
 route.post('/edit/:id',AuthController.authenticateToken , reservationController.editReservation);
