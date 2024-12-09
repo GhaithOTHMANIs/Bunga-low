@@ -1,14 +1,15 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const reservationSchema = new Schema({
   bungalow: {
     type: Schema.Types.ObjectId,
-    ref: 'Bungalow',
+    ref: "Bungalow",
     required: true,
   },
-  user: {
-    type: String, 
+  client: {
+    type: Schema.Types.ObjectId,
+    ref: "Client",
     required: true,
   },
   startDate: {
@@ -20,15 +21,15 @@ const reservationSchema = new Schema({
     required: true,
     validate: {
       validator: function (value) {
-        return value > this.startDate; 
+        return value > this.startDate;
       },
-      message: 'End date must be after the start date.',
+      message: "End date must be after the start date.",
     },
   },
   status: {
     type: String,
-    enum: ['pending', 'confirmed', 'cancelled'], 
-  }
+    enum: ["pending", "confirmed", "cancelled"],
+  },
 });
 
-module.exports = mongoose.model('Reservation', reservationSchema);
+module.exports = mongoose.model("Reservation", reservationSchema);

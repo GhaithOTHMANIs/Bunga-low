@@ -10,17 +10,31 @@
   <form id="reservationForm">
     
     <label for="bungalowId">Bungalow:</label><br>
-    <select id="bungalowId" name="bungalowId" required>
-      <% bungalows.forEach(function(bungalow) { %>
-        <option value="<%= bungalow._id %>" <%= bungalow._id.toString() === reservation.bungalow._id.toString() ? 'selected' : '' %>>
-          <%= bungalow.address %>
-        </option>
-      <% }); %>
-    </select><br><br>
+    <% if (bungalows && bungalows.length > 0) { %>
+      <select id="bungalowId" name="bungalowId" required>
+        <% bungalows.forEach(function (bungalow) { %>
+          <% if (bungalow) { %> 
+            <option value="<%= bungalow._id %>" 
+              <%= reservation.bungalow && bungalow._id.toString() === reservation.bungalow._id.toString() ? 'selected' : '' %>>
+              <%= bungalow.address %>
+            </option>
+          <% } %>
+        <% }); %>
+      </select>
+    <% } else { %>
+      <span class="text-gray-500 italic">No bungalows available</span>
+    <% } %>
+    <br><br>
 
-    <label for="user">User:</label><br>
-    <input type="text" id="user" name="user" value="<%= reservation.user %>" required><br><br>
-
+    <label templates/bungalow_detail.ejsfor="user">User:</label><br>
+<select id="user" name="user" required>
+  <% users.forEach(function(user) { %>
+    <option value="<%= user._id %>" <%= reservation.user.equals(user._id) ? "selected" : "" %>>
+      <%= user.name %>
+    </option>
+  <% }) %>
+</select>
+<br><br>
     <label for="startDate">Start Date:</label><br>
     <input type="date" id="startDate" name="startDate" value="<%= reservation.startDate.toISOString().split('T')[0] %>" required><br><br>
 
@@ -37,15 +51,15 @@
     <button type="submit">Update Reservation</button>
   </form>
 
-  <!-- Success message will appear here -->
   <p id="responseMessage" style="color: green; font-weight: bold;"></p>
+
+  <a href="/reservation/all">Back to Reservations</a>
 
   <script>
     document.getElementById('reservationForm').addEventListener('submit', async function (event) {
       event.preventDefault(); // Prevent form from refreshing the page
 
-      // Get form data
-      const bungalowId = document.getElementById('bungalowId').value;
+      const bungalowId = document.getElementById('bungalowId') ? document.getElementById('bungalowId').value : null;
       const user = document.getElementById('user').value;
       const startDate = document.getElementById('startDate').value;
       const endDate = document.getElementById('endDate').value;
@@ -60,7 +74,6 @@
       };
 
       try {
-        // Send form data as a JSON object using fetch (POST request)
         const response = await fetch(`/reservation/edit/<%= reservation._id %>`, {
           method: 'POST',
           headers: {
@@ -72,10 +85,8 @@
         const result = await response.json();
         
         if (response.ok) {
-          // If update is successful, show the success message
           document.getElementById('responseMessage').textContent = 'Reservation updated successfully!';
         } else {
-          // If there's an error, show the error message
           document.getElementById('responseMessage').textContent = `Error: ${result.error || result.details || 'Something went wrong'}`;
         }
       } catch (error) {

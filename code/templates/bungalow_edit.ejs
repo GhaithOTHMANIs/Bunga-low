@@ -3,62 +3,72 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Reservation</title>
+  <title>Edit Bungalow</title>
 </head>
 <body>
-  <h1>Edit Reservation</h1>
-  <form id="reservationForm" action="/reservation/edit/<%= reservation._id %>" method="POST">
+  <h1>Edit Bungalow</h1>
+  <form id="bungalowForm" action="/bungalow/edit/<%= bungalow._id %>" method="POST">
     
-    <label for="bungalowId">Bungalow:</label><br>
-    <select id="bungalowId" name="bungalowId" required>
-      <% bungalows.forEach(function(bungalow) { %>
-        <option value="<%= bungalow._id %>" <%= bungalow._id.toString() === reservation.bungalow._id.toString() ? 'selected' : '' %>>
-          <%= bungalow.address %>
-        </option>
-      <% }); %>
+    <label for="address">Address:</label><br>
+    <input type="text" id="address" name="address" value="<%= bungalow.address %>" required><br><br>
+
+    <label for="description">Description:</label><br>
+    <textarea id="description" name="description" rows="4" cols="50"><%= bungalow.description %></textarea><br><br>
+
+    <label for="type">Type:</label><br>
+    <select id="type" name="type" required>
+      <option value="detached" <%= bungalow.type === 'detached' ? 'selected' : '' %>>Detached</option>
+      <option value="semi-detached" <%= bungalow.type === 'semi-detached' ? 'selected' : '' %>>Semi-Detached</option>
+      <option value="terraced" <%= bungalow.type === 'terraced' ? 'selected' : '' %>>Terraced</option>
+      <option value="cottage" <%= bungalow.type === 'cottage' ? 'selected' : '' %>>Cottage</option>
+      <option value="villa" <%= bungalow.type === 'villa' ? 'selected' : '' %>>Villa</option>
     </select><br><br>
-
-    <label for="user">User:</label><br>
-    <input type="text" id="user" name="user" value="<%= reservation.user %>" required><br><br>
-
-    <label for="startDate">Start Date:</label><br>
-    <input type="date" id="startDate" name="startDate" value="<%= reservation.startDate.toISOString().split('T')[0] %>" required><br><br>
-
-    <label for="endDate">End Date:</label><br>
-    <input type="date" id="endDate" name="endDate" value="<%= reservation.endDate.toISOString().split('T')[0] %>" required><br><br>
 
     <label for="status">Status:</label><br>
     <select id="status" name="status" required>
-      <option value="pending" <%= reservation.status === 'pending' ? 'selected' : '' %>>Pending</option>
-      <option value="confirmed" <%= reservation.status === 'confirmed' ? 'selected' : '' %>>Confirmed</option>
-      <option value="cancelled" <%= reservation.status === 'cancelled' ? 'selected' : '' %>>Cancelled</option>
+      <option value="available" <%= bungalow.status === 'available' ? 'selected' : '' %>>Available</option>
+      <option value="rented" <%= bungalow.status === 'rented' ? 'selected' : '' %>>Rented</option>
+      <option value="under maintenance" <%= bungalow.status === 'under maintenance' ? 'selected' : '' %>>Under Maintenance</option>
     </select><br><br>
 
-    <button type="submit">Update Reservation</button>
+    <label for="price">Price:</label><br>
+    <input type="number" id="price" name="price" value="<%= bungalow.price %>" min="0" required><br><br>
+
+    <label for="location">Location (Coordinates):</label><br>
+    <input type="text" id="location-lat" name="latitude" placeholder="Latitude" value="<%= bungalow.location.coordinates[1] %>" required>
+    <input type="text" id="location-lng" name="longitude" placeholder="Longitude" value="<%= bungalow.location.coordinates[0] %>" required><br><br>
+
+    <button type="submit">Update Bungalow</button>
   </form>
 
   <p id="responseMessage"></p>
 
   <script>
-    document.getElementById('reservationForm').addEventListener('submit', async (event) => {
+    document.getElementById('bungalowForm').addEventListener('submit', async (event) => {
       event.preventDefault(); // Prevent form from refreshing the page
 
-      const bungalowId = document.getElementById('bungalowId').value;
-      const user = document.getElementById('user').value;
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
+      const address = document.getElementById('address').value;
+      const description = document.getElementById('description').value;
+      const type = document.getElementById('type').value;
       const status = document.getElementById('status').value;
+      const price = document.getElementById('price').value;
+      const latitude = document.getElementById('location-lat').value;
+      const longitude = document.getElementById('location-lng').value;
 
       const data = {
-        bungalowId,
-        user,
-        startDate,
-        endDate,
-        status
+        address,
+        description,
+        type,
+        status,
+        price,
+        location: {
+          type: "Point",
+          coordinates: [parseFloat(longitude), parseFloat(latitude)],
+        },
       };
 
       try {
-        const response = await fetch(`/reservation/edit/<%= reservation._id %>`, {
+        const response = await fetch(`/bungalow/edit/<%= bungalow._id %>`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -68,7 +78,7 @@
         
         const result = await response.json();
         if (response.ok) {
-          document.getElementById('responseMessage').textContent = 'Reservation updated successfully!';
+          document.getElementById('responseMessage').textContent = 'Bungalow updated successfully!';
         } else {
           document.getElementById('responseMessage').textContent = `Error: ${result.error}`;
         }
@@ -78,7 +88,7 @@
     });
   </script>
 
-  <a href="/reservation/<%= reservation._id %>">Cancel</a>
+  <a href="/bungalow/all %>">Go back</a>
 
 </body>
 </html>

@@ -1,74 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Create Reservation</title>
-</head>
-<body>
-  <h1>Create a New Reservation</h1>
-  <form id="reservationForm">
-    <label for="bungalowId">Bungalow ID:</label><br>
-    <input type="text" id="bungalowId" name="bungalowId" required><br><br>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Reservation</title>
+  </head>
+  <body>
+    <h1>Create a New Reservation</h1>
+    <form id="reservationForm">
+      <label for="bungalowId">Bungalow Address:</label><br />
+      <select id="bungalowId" name="bungalowId" required>
+        <% bungalows.forEach(function (bungalow) { %>
+        <option value="<%= bungalow._id %>"><%= bungalow.address %></option>
+        <% }); %>
+      </select>
+      <br /><br />
 
-    <label for="user">User Name:</label><br>
-    <input type="text" id="user" name="user" required><br><br>
+      <label for="clientId">Client Name:</label><br />
+      <select id="clientId" name="clientId" required>
+        <% clients.forEach(function (client) { %>
+        <option value="<%= client._id %>">
+          <%= client.firstName %> <%= client.lastName %>
+        </option>
+        <% }); %>
+      </select>
+      <br /><br />
 
-    <label for="startDate">Start Date:</label><br>
-    <input type="date" id="startDate" name="startDate" required><br><br>
+      <label for="startDate">Start Date:</label><br />
+      <input type="date" id="startDate" name="startDate" required /><br /><br />
 
-    <label for="endDate">End Date:</label><br>
-    <input type="date" id="endDate" name="endDate" required><br><br>
+      <label for="endDate">End Date:</label><br />
+      <input type="date" id="endDate" name="endDate" required /><br /><br />
 
-    <label for="status">Status:</label><br>
-    <select id="status" name="status" required>
-      <option value="pending">Pending</option>
-      <option value="confirmed">Confirmed</option>
-      <option value="cancelled">Cancelled</option>
-    </select><br><br>
-    
-    <button type="submit">Submit</button>
-  </form>
+      <label for="status">Status:</label><br />
+      <select id="status" name="status" required>
+        <option value="pending">Pending</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="cancelled">Cancelled</option>
+      </select>
+      <br /><br />
 
-  <p id="responseMessage"></p>
+      <button type="submit">Submit</button>
+    </form>
 
-  <script>
-    document.getElementById('reservationForm').addEventListener('submit', async (event) => {
-      event.preventDefault(); // Prevent form from refreshing the page
+    <p id="responseMessage" style="color: green; font-weight: bold"></p>
 
-      const bungalowId = document.getElementById('bungalowId').value;
-      const user = document.getElementById('user').value;
-      const startDate = document.getElementById('startDate').value;
-      const endDate = document.getElementById('endDate').value;
-      const status = document.getElementById('status').value;
+    <a href="/reservation/all">Back to Reservations</a>
 
-      const data = {
-        bungalowId,
-        user,
-        startDate,
-        endDate,
-        status
-      };
+    <script>
+      document
+        .getElementById("reservationForm")
+        .addEventListener("submit", async (event) => {
+          event.preventDefault(); // Prevent form from refreshing the page
 
-      try {
-        const response = await fetch('/reservation/add', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
+          const bungalowId = document.getElementById("bungalowId").value;
+          const clientId = document.getElementById("clientId").value;
+          const startDate = document.getElementById("startDate").value;
+          const endDate = document.getElementById("endDate").value;
+          const status = document.getElementById("status").value;
+
+          const data = {
+            bungalow: bungalowId,
+            client: clientId,
+            startDate,
+            endDate,
+            status,
+          };
+
+          try {
+            const response = await fetch("/reservation/add", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+              document.getElementById("responseMessage").textContent =
+                "Reservation created successfully!";
+            } else {
+              document.getElementById(
+                "responseMessage"
+              ).textContent = `Error: ${result.error || "Unknown error"}`;
+            }
+          } catch (error) {
+            document.getElementById(
+              "responseMessage"
+            ).textContent = `Error: ${error.message}`;
+          }
         });
-
-        const result = await response.json();
-        if (response.ok) {
-          document.getElementById('responseMessage').textContent = 'Reservation created successfully!';
-        } else {
-          document.getElementById('responseMessage').textContent = `Error: ${result.error}`;
-        }
-      } catch (error) {
-        document.getElementById('responseMessage').textContent = `Error: ${error.message}`;
-      }
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

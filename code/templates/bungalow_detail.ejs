@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bungalow Details</title>
-</head>
-<body>
-  <h1>Bungalow Details</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bungalow Details</title>
+  </head>
+  <body>
+    <h1>Bungalow Details</h1>
 
-  <h2><%= bungalow.address %></h2>
-  <p><strong>Description:</strong> <%= bungalow.description %></p>
-  <p><strong>Type:</strong> <%= bungalow.type %></p>
-  <p><strong>Status:</strong> <%= bungalow.status %></p>
-  <p><strong>Price:</strong> $<%= bungalow.price %></p>
+    <h2><%= bungalow.address %></h2>
+    <p><strong>Description:</strong> <%= bungalow.description %></p>
+    <p><strong>Type:</strong> <%= bungalow.type %></p>
+    <p><strong>Status:</strong> <%= bungalow.status %></p>
+    <p><strong>Price:</strong> $<%= bungalow.price %></p>
 
-  <h3>Images</h3>
-  <ul>
-    <% bungalow.images.forEach(function(image) { %>
-      <li><img src="<%= image.url %>" alt="Bungalow Image" style="width: 300px;"/></li>
-    <% }); %>
-  </ul>
+    <h3>Images</h3>
+    <ul>
+      <% bungalow.images.forEach(function(image) { %>
+      <li>
+        <img src="<%= image.url %>" alt="Bungalow Image" style="width: 300px" />
+      </li>
+      <% }); %>
+    </ul>
 
-  <h3>Location</h3>
-  <p><strong>Longitude:</strong> <%= bungalow.location.coordinates[0] %></p>
-  <p><strong>Latitude:</strong> <%= bungalow.location.coordinates[1] %></p>
+    <h3>Location</h3>
+    <p><strong>Longitude:</strong> <%= bungalow.location.coordinates[0] %></p>
+    <p><strong>Latitude:</strong> <%= bungalow.location.coordinates[1] %></p>
 
-</body>
+    <a href="/bungalow/all">Go Back</a>
+  </body>
 </html>

@@ -1,30 +1,66 @@
-const express = require('express');
-const dotenv = require('dotenv');
-const AuthController = require('../middlewares/authentification.js');
-const reservationController = require('../controllers/reservationController.js');
-
-
+const express = require("express");
+const dotenv = require("dotenv");
+const AuthController = require("../middlewares/authentification.js");
+const reservationController = require("../controllers/reservationController.js");
 
 const route = express.Router();
 
+route.get(
+  "/all",
+  AuthController.authenticateToken,
+  reservationController.getAllReservations
+);
 
+route.post(
+  "/approve/:id",
+  AuthController.authenticateToken,
+  reservationController.approveReservation
+);
 
+route.post(
+  "/decline/:id",
+  AuthController.authenticateToken,
+  reservationController.declineReservation
+);
 
-route.get('/all',AuthController.authenticateToken ,reservationController.getAllReservations);
+route.get(
+  "/edit/:id",
+  AuthController.authenticateToken,
+  reservationController.editReservationPage
+);
 
-route.post('/approve/:id',AuthController.authenticateToken , reservationController.approveReservation);
+route.post(
+  "/edit/:id",
+  AuthController.authenticateToken,
+  reservationController.editReservation
+);
 
-route.get('/edit/:id',AuthController.authenticateToken , reservationController.editReservationPage);
+route.get(
+  "/add",
+  AuthController.authenticateToken,
+  reservationController.addReservationPage
+);
 
-route.post('/edit/:id',AuthController.authenticateToken , reservationController.editReservation);
+route.post(
+  "/add",
+  AuthController.authenticateToken,
+  reservationController.addReservation
+);
 
-route.get('/add',AuthController.authenticateToken , reservationController.addReservationPage);
+route.get(
+  "/:id",
+  AuthController.authenticateToken,
+  reservationController.getReservationDetails
+);
 
-route.post('/add',AuthController.authenticateToken , reservationController.addReservation);
+route.delete(
+  "/:id",
+  AuthController.authenticateToken,
+  reservationController.deleteReservation
+);
 
-route.get('/:id',AuthController.authenticateToken , reservationController.getReservationDetails);
+route.get("/api/all", reservationController.getAllReservationsAPI);
 
-route.delete('/:id',AuthController.authenticateToken , reservationController.deleteReservation);
-
+route.post("/api/reserve", reservationController.reserveBungalowAPI);
 
 module.exports = route;
